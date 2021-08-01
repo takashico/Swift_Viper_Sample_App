@@ -6,8 +6,6 @@ target 'ViperSampleApp' do
   use_frameworks!
 
   # Pods for ViperSampleApp
-   pod 'RxSwift'
-   pod 'RxCocoa'
 
   target 'ViperSampleAppTests' do
     inherit! :search_paths
