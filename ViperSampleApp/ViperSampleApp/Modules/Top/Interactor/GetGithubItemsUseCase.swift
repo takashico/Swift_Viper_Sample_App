@@ -14,7 +14,7 @@ class GetGithubItemsUseCase: UseCaseProtocol {
     }
     
     func execute(_ parameter: Void, completion: ((Result<[GithubItemEntitiy], Error>) -> ())?) {
-        
+        // TODO: ベタがきなので後ほど修正する
         guard let url = URL(string: "https://api.github.com/search/repositories?q=swift&page=20") else { return }
         
         let session = URLSession(configuration: .default)
