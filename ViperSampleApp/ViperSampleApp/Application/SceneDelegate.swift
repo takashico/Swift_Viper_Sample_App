@@ -14,16 +14,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let _ = (scene as? UIWindowScene) else { return }
         
-//        guard let viewController = UIStoryboard(name: "GithubItemList", bundle: nil).instantiateInitialViewController() as? GithubItemListViewController else {
-//            fatalError()
-//        }
         let viewController = GithubItemListViewController.instantiate()
         
         viewController.presenter = GithubItemListPresenter(
             view: viewController,
             inject: GithubItemListPresenter.Dependency(
                 router: GithubItemListRouter(view: viewController),
-                getGithubItemsUseCase: UseCase(GetGithubItemsUseCase())
+                getGithubItemsUseCase: UseCase(GetGithubItemsUseCase(language: "swift", page: 1, per_page: 20))
             )
         )
         

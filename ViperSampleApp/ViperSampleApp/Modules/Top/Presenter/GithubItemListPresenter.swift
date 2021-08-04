@@ -10,13 +10,14 @@ import Foundation
 protocol GithubItemListPresenterProtocol: AnyObject {
     
     func didLoad()
+    func loadGithubItemsMore()
     func didSelect(githubItemEntity: GithubItemEntitiy)
 }
 
 /// Viewが準拠するプロトコル
 protocol GithubItemListViewProtocol: AnyObject {
     
-    func showGithubItems(_ githubItemEntities: [GithubItemEntitiy])
+    func showGithubItems(_ items: [GithubItemEntitiy])
     func showEmpty()
     func showError(_ error: Error)
 }
@@ -25,8 +26,11 @@ class GithubItemListPresenter {
     
     struct Dependency {
         let router: GithubItemListRouter!
-        let getGithubItemsUseCase: UseCase<Void, [GithubItemEntitiy], Error>
+        let getGithubItemsUseCase: UseCase<GithubItemsParameter, [GithubItemEntitiy], Error>
     }
+    
+    private var page: Int = 1
+    private let perPage: Int = 20
     
     weak var view: GithubItemListViewProtocol!
     private var di: Dependency
@@ -39,13 +43,31 @@ class GithubItemListPresenter {
 
 extension GithubItemListPresenter: GithubItemListPresenterProtocol {
     func didLoad() {
-        di.getGithubItemsUseCase.execute(()) { [weak self] result in
+        di.getGithubItemsUseCase.execute(GithubItemsParameter(language: "swift", page: page, per_page: perPage)) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
             case .success(let githubItemEntities):
                 if githubItemEntities.isEmpty {
                     self.view.showEmpty()
+                } else {
+                    self.view.showGithubItems(githubItemEntities)
+                }
+            case .failure(let error):
+                self.view.showError(error)
+            }
+        }
+    }
+    
+    func loadGithubItemsMore() {
+        page = page + 1
+        di.getGithubItemsUseCase.execute(GithubItemsParameter(language: "swift", page: page, per_page: perPage)) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let githubItemEntities):
+                if githubItemEntities.isEmpty {
+                    // TODO: ローディングをやめる
                 } else {
                     self.view.showGithubItems(githubItemEntities)
                 }

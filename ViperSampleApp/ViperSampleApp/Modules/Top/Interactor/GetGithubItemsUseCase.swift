@@ -13,9 +13,47 @@ class GetGithubItemsUseCase: UseCaseProtocol {
         let items: [GithubItemEntitiy]
     }
     
-    func execute(_ parameter: Void, completion: ((Result<[GithubItemEntitiy], Error>) -> ())?) {
-        // TODO: ベタがきなので後ほど修正する
-        guard let url = URL(string: "https://api.github.com/search/repositories?q=swift&page=20") else { return }
+    var baseURL: String {
+        return "https://api.github.com"
+    }
+
+    var path: String {
+        return "/search/repositories"
+    }
+    
+    var buildUrl: String {
+        return URL(string: baseURL)!.appendingPathComponent(path).absoluteString
+    }
+
+    let parameter: GithubItemsParameter
+
+    init(language: String, page: Int, per_page: Int) {
+
+        self.parameter = GithubItemsParameter(
+            language: language,
+            page: page,
+            per_page: per_page
+        )
+    }
+    
+    func requestUrl(url: String, parameter: GithubItemsParameter) -> URL? {
+        let params = parameter.toDictionary()
+        
+        let result = params.enumerated().map { index, param -> String in
+            let queryString = index == 0 ? "?" : "&"
+            return queryString + "\(param.key)=\(param.value)"
+        }.joined()
+        
+        return URL(string: url + result)
+    }
+}
+
+extension GetGithubItemsUseCase {
+    func execute(_ parameter: GithubItemsParameter, completion: ((Result<[GithubItemEntitiy], Error>) -> ())?) {
+        
+        guard let url = self.requestUrl(url: buildUrl, parameter: parameter) else { return }
+        
+        print(url.absoluteString)
         
         let session = URLSession(configuration: .default)
         let task = session.dataTask(with: url) { data, response, error in

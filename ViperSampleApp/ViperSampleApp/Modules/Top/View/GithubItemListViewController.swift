@@ -41,12 +41,21 @@ extension GithubItemListViewController: UITableViewDelegate, UITableViewDataSour
         
         presenter.didSelect(githubItemEntity: githubItemEntities[indexPath.row])
     }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard !self.githubItemEntities.isEmpty else { return }
+        
+        if indexPath.row >= (githubItemEntities.count - 2) {
+            // TODO:ページングの読み込み処理
+            presenter.loadGithubItemsMore()
+        }
+    }
 }
 
 extension GithubItemListViewController: GithubItemListViewProtocol {
     
-    func showGithubItems(_ githubItemEntities: [GithubItemEntitiy]) {
-        self.githubItemEntities = githubItemEntities
+    func showGithubItems(_ items: [GithubItemEntitiy]) {
+        self.githubItemEntities.append(contentsOf: items)
         self.tableView.reloadData()
     }
     
