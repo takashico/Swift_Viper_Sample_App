@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             view: viewController,
             inject: GithubItemListPresenter.Dependency(
                 router: GithubItemListRouter(view: viewController),
-                getGithubItemsUseCase: UseCase(GetGithubItemsUseCase(language: "swift", page: 1, per_page: 20))
+                getGithubItemsUseCase: UseCase(GetGithubItemsUseCase())
             )
         )
         

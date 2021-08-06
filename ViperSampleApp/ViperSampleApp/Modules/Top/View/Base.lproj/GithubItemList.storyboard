@@ -54,10 +54,27 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="indicatorFooterView" destination="in4-06-OWC" id="j2k-V5-Raq"/>
+                        <outlet property="indicatorView" destination="Hqp-gv-JuC" id="lAh-iF-giF"/>
                         <outlet property="tableView" destination="a4v-lH-5e2" id="wmJ-kr-x4f"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <view contentMode="scaleToFill" id="in4-06-OWC">
+                    <rect key="frame" x="0.0" y="0.0" width="378" height="50"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="Hqp-gv-JuC">
+                            <rect key="frame" x="179" y="15" width="20" height="20"/>
+                        </activityIndicatorView>
+                    </subviews>
+                    <viewLayoutGuide key="safeArea" id="tEW-n7-3YN"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstItem="Hqp-gv-JuC" firstAttribute="centerY" secondItem="in4-06-OWC" secondAttribute="centerY" id="LCI-hf-9E0"/>
+                        <constraint firstItem="Hqp-gv-JuC" firstAttribute="centerX" secondItem="in4-06-OWC" secondAttribute="centerX" id="nzb-Ug-I9x"/>
+                    </constraints>
+                </view>
             </objects>
             <point key="canvasLocation" x="23" y="84"/>
         </scene>

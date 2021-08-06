@@ -24,10 +24,10 @@ class GetGithubItemsUseCase: UseCaseProtocol {
     var buildUrl: String {
         return URL(string: baseURL)!.appendingPathComponent(path).absoluteString
     }
-
+    
     let parameter: GithubItemsParameter
 
-    init(language: String, page: Int, per_page: Int) {
+    init(language: String = "swift", page: Int = 1, per_page: Int = 20) {
 
         self.parameter = GithubItemsParameter(
             language: language,

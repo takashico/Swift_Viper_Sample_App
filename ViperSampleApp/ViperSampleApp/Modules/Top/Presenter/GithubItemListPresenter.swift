@@ -20,6 +20,7 @@ protocol GithubItemListViewProtocol: AnyObject {
     func showGithubItems(_ items: [GithubItemEntitiy])
     func showEmpty()
     func showError(_ error: Error)
+    func indicatorView(animate: Bool)
 }
 
 class GithubItemListPresenter {
@@ -48,6 +49,9 @@ extension GithubItemListPresenter: GithubItemListPresenterProtocol {
             
             switch result {
             case .success(let githubItemEntities):
+                if githubItemEntities.count < self.page - 1 {
+                    self.view.indicatorView(animate: false)
+                }
                 if githubItemEntities.isEmpty {
                     self.view.showEmpty()
                 } else {
@@ -61,13 +65,15 @@ extension GithubItemListPresenter: GithubItemListPresenterProtocol {
     
     func loadGithubItemsMore() {
         page = page + 1
+        
         di.getGithubItemsUseCase.execute(GithubItemsParameter(language: "swift", page: page, per_page: perPage)) { [weak self] result in
             guard let self = self else { return }
             
             switch result {
             case .success(let githubItemEntities):
-                if githubItemEntities.isEmpty {
+                if githubItemEntities.count < self.page - 1 {
                     // TODO: ローディングをやめる
+                    self.view.indicatorView(animate: false)
                 } else {
                     self.view.showGithubItems(githubItemEntities)
                 }

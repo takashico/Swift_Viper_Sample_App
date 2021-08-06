@@ -12,11 +12,17 @@ class GithubItemListViewController: UIViewController {
     var presenter: GithubItemListPresenterProtocol!
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet var indicatorFooterView: UIView!
+    @IBOutlet weak var indicatorView: UIActivityIndicatorView!
     
     private var githubItemEntities = [GithubItemEntitiy]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        indicatorFooterView.frame = CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 44)
+        self.tableView.tableFooterView = indicatorFooterView
+        indicatorView.startAnimating()
         
         presenter.didLoad()
     }
@@ -46,7 +52,6 @@ extension GithubItemListViewController: UITableViewDelegate, UITableViewDataSour
         guard !self.githubItemEntities.isEmpty else { return }
         
         if indexPath.row >= (githubItemEntities.count - 2) {
-            // TODO:ページングの読み込み処理
             presenter.loadGithubItemsMore()
         }
     }
@@ -65,5 +70,15 @@ extension GithubItemListViewController: GithubItemListViewProtocol {
     
     func showError(_ error: Error) {
         // エラー画面を表示する
+    }
+    
+    func indicatorView(animate: Bool) {
+        // TODO: フェッチするデータがなくなったときにはUIView()をフッターに設定する
+        // 条件としては、取得したデータが20件未満だった場合に取得するデータがなくなったと判断できる
+        if animate {
+            indicatorView.startAnimating()
+        } else {
+            self.tableView.tableFooterView = UIView()
+        }
     }
 }

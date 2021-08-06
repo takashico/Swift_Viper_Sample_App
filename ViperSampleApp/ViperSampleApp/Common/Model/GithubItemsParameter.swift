@@ -7,7 +7,7 @@
 
 final class GithubItemsParameter {
     let language: String
-    let page: Int
+    var page: Int
     let per_page: Int
     
     init(language: String, page: Int, per_page: Int) {
